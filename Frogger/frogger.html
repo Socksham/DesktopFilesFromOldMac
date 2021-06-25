@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- This code is necessary to install the jquery library.  Just copy and paste it.-->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+    <script>
+        var a;
+        var carArray = [];
+
+        var carArray2 = [];
+
+        var logArray = [];
+
+        var logArraySpeed = [];
+        var logSpeed;
+        var logX = 400;
+        var logY = 347;
+
+        var gameOverWin = false;
+        
+        var carX = 500;
+        var carY = 470;
+
+        var car2X = -300;
+        var car2Y = 230;
+
+        var onLog = 0;
+
+        var correctFroggerLocation = false;
+
+        var createImage = function(src, title,xcoord,ycoord) {
+            var img = new Image();
+            img.src = src;
+            img.alt = title;
+            img.title = title;
+            img.left = xcoord;
+            img.top = ycoord;
+
+            return img;
+        };
+
+        var frogger =  createImage("frogger.png", "frogger", 200, 665);
+        //var car1 = createImage("car.png", "car1", 100, 100);
+
+
+        function initialize() {
+            drawBackground();
+            drawRoad();
+            drawRoad2();
+            drawCarsInit();
+            drawCars2Init();
+            createGround();
+            drawWater();
+            drawLogsInit();
+            drawGrass();
+            drawfinishLine();
+            drawFrogger();
+        }
+
+        function drawCars2Init(){
+            for(i=0;i<4;i++){
+                if(i > 0){
+                    car2X -= 200;
+                }
+                if(i > 1){
+                    car2Y = 310;
+                }
+                carArray2.push(createImage("car2.png", "car" + i, car2X, car2Y));
+                
+            }
+        }
+
+        function drawCars2(){
+            var ctx = document.getElementById("myCanvas").getContext("2d");
+            for(i=0;i<4;i++){
+                carArray2[i].left+= 4;
+                ctx.drawImage(carArray2[i], carArray2[i].left, carArray2[i].top, 60, 40);
+                if(carArray2[i].left > 500){
+                    carArray2[i].left = -60;
+                }
+            }
+        }
+
+        function drawLogsInit(){
+            var first = true;
+            var first2 = true;
+            for(i=0;i<13;i++){
+                if(i == 0){
+                    logSpeed = 1;
+                }
+                if(i > 0){
+                    logX += 100;
+                    logSpeed = 1;
+                }
+                if(i > 5){
+                    if(first){
+                        logY += 35;
+                        logX = 700;
+                        first = !first;
+                    }
+                    logSpeed = 1;
+
+                }
+                if(i > 9){
+                    if(first2){
+                        logY += 35;
+                        logX = 600;
+                        first2 = !first2;
+                    }
+                    logSpeed = 1;
+                }
+                logArray.push(createImage("log.png", "log" + i, logX, logY));
+                logArraySpeed.push(logSpeed)
+
+            }
+        }
+
+        function drawLogs(){
+            var ctx = document.getElementById("myCanvas").getContext("2d");
+            for(i=0;i<13;i++){
+                logArray[i].left -= logArraySpeed[i];
+                ctx.drawImage(logArray[i], logArray[i].left, logArray[i].top, 50, 40);
+                if(logArray[i].left + 60 < 0){
+                    logArray[i].left = 500;
+                }
+            }
+        }
+
+        function drawCarsInit(){
+            for(i=0;i<4;i++){
+                if(i > 0){
+                    carX += 400;
+                }
+                if(i > 1){
+                    carY = 550;
+                }
+                carArray.push(createImage("car.png", "car" + i, carX, carY));
+                
+            }
+        }
+
+        function drawWater(){
+            ctx = document.getElementById("myCanvas").getContext("2d");
+            ctx.beginPath();
+            ctx.rect(0, 350, window.innerWidth, 105);
+            ctx.fillStyle = "#4d76ff";
+            ctx.fill();
+        }
+
+        function drawGrass(){
+            var ctx = document.getElementById("myCanvas").getContext("2d");
+            ctx.beginPath();
+            ctx.rect(0, 455, window.innerWidth, 15);
+
+            ctx.fillStyle = "green";
+            ctx.fill();
+        }
+
+        function drawRoad(){
+            var roadLineX = -10;
+            var roadLineY = 520;
+            var ctx = document.getElementById("myCanvas").getContext("2d");
+            ctx.beginPath();
+            ctx.rect(0, 470, window.innerWidth, 120);
+            ctx.fillStyle = "black";
+            ctx.fill();
+            ctx.stroke();
+
+            for(i=0;i<10;i++){
+                ctx.beginPath();
+                ctx.rect(roadLineX, roadLineY, 75, 20);
+                ctx.fillStyle = "yellow";
+                ctx.fill();
+                roadLineX += 100;
+            }
+
+        }
+        var finish = createImage("finish.png", "finish", 150, 60);
+
+        function drawfinishLine(){
+            var ctx = document.getElementById("myCanvas").getContext("2d");
+            ctx.beginPath();
+            ctx.rect(0, 0, 1000, 230);
+            ctx.fillStyle = "white";
+            ctx.fill();
+            if(!gameOverWin){
+                ctx.drawImage(finish, finish.left, finish.top, 200, 100);
+            }else{
+                ctx.drawImage(finish, 100, 320, 500, 300);
+            }
+        }
+
+        function drawRoad2(){
+            var roadLine2X = -10;
+            var roadLine2Y = 280;
+            var ctx = document.getElementById("myCanvas").getContext("2d");
+            ctx.beginPath();
+            ctx.rect(0, 230, window.innerWidth, 120);
+            ctx.fillStyle = "black";
+            ctx.fill();
+            ctx.stroke();
+
+            for(i=0;i<10;i++){
+                ctx.beginPath();
+                ctx.rect(roadLine2X, roadLine2Y, 75, 20);
+                ctx.fillStyle = "yellow";
+                ctx.fill();
+                roadLine2X += 100;
+            }
+
+        }
+        function createGround(){
+            var ctx = document.getElementById("myCanvas").getContext("2d");
+            ctx.beginPath();
+            ctx.rect(0, 590, window.innerWidth, 120);
+            ctx.fillStyle = "#964B00";
+            ctx.fill();
+            ctx.stroke();
+        }
+        function startAnimation() {
+            animate();
+
+        }
+        function stopAnimation() {
+            cancelAnimationFrame(a);
+        }
+        //all functions in this method will run at the speed of your computers frame rate
+        function animate(){
+            a=requestAnimationFrame(animate);
+            drawBackground();
+            drawRoad();
+            drawRoad2();
+            createGround();
+            drawWater();
+            drawCars();
+            drawCars2();
+            drawLogs();
+            drawGrass();
+            drawfinishLine();
+            checkCollisionJ();
+            drawFrogger();
+            if(gameOverWin){
+                var ctx = document.getElementById("myCanvas").getContext("2d");
+                ctx.beginPath();
+                ctx.rect(0, 0, window.width, window.height);
+                ctx.fillStyle = "white";
+                ctx.fill();
+            }
+        }
+        function drawFrogger(){
+            var ctx = document.getElementById("myCanvas").getContext("2d");
+            ctx.drawImage(frogger, frogger.left, frogger.top, 30, 35);
+        }
+
+        function drawBackground(){
+            var ctx = document.getElementById("myCanvas").getContext("2d");
+            ctx.fillStyle="#08609e";   //sets the fill color (neon green)
+            ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+        }
+        
+        function drawCars(){
+            var ctx = document.getElementById("myCanvas").getContext("2d");
+            for(i=0;i<4;i++){
+                carArray[i].left -= 1;
+                ctx.drawImage(carArray[i], carArray[i].left, carArray[i].top, 60, 40);
+                if(carArray[i].left + 60 < 0){
+                    carArray[i].left = 500;
+                }
+            }
+            
+        }
+
+        function checkCollisionJ() {
+            var ctx = document.getElementById("myCanvas").getContext("2d");
+            for(i=0;i<4;i++){
+                if(frogger.left+50 > carArray[i].left && frogger.left<carArray[i].left + 60 && frogger.top + 30 > carArray[i].top && frogger.top < carArray[i].top+40){
+                    frogger.left = 200;
+                    frogger.top = 665;
+                }
+            }
+
+            if(frogger.top < 230){
+                console.log("seg");
+            }
+
+            for(i=0;i<4;i++){
+                if(frogger.left+50 > carArray2[i].left && frogger.left<carArray2[i].left + 60 && frogger.top + 30 > carArray2[i].top && frogger.top < carArray2[i].top+40){
+                    frogger.left = 200;
+                    frogger.top = 665;
+                }
+            }
+
+            if(frogger.left < 0){
+                frogger.left = 0;
+            }
+            if(frogger.left + 30 > 500){
+                frogger.left = 450;
+            }
+            if(frogger.top + 35 > 700){
+                frogger.top = 665;
+            }
+            var previousLog = onLog;
+            for(i=0; i<13; i++){
+                if(frogger.left +15> logArray[i].left && frogger.left < logArray[i].left+ 25 && frogger.top > logArray[i].top && frogger.top + 35 < logArray[i].top + 40){
+                    frogger.left -= 1;
+                    onLog++;
+                }
+            }
+
+            if(frogger.top > 350 && frogger.top + 30 < 455 && previousLog == onLog){
+                frogger.top = 665;
+                frogger.left= 200;
+            }
+
+            if(frogger.top > 0 && frogger.top + 35 < 230){
+                gameOverWin = true;
+            }
+
+
+        }
+
+        //Keypress Event code
+        $(document).keydown(function(event){  //jQuery code to recognize a keydown event
+            var keycode = (event.keyCode ? event.keyCode : event.which);
+            if(keycode == 37){
+                 frogger.left -= 30;
+            }
+            if(keycode == 38){
+                frogger.top -= 35;
+            }
+            if(keycode == 39){
+                frogger.left += 30;
+            }
+            if(keycode == 40){
+                frogger.top += 35;
+
+            }
+
+            //all key numbers can be found on the internet
+        });
+    </script>
+</head>
+<body onload="initialize()">
+<canvas id="myCanvas" width="500" height="700"
+        style="border:1px solid #000000;">
+</canvas>
+
+<button type="button" onclick="startAnimation()">click to start animation</button>
+<button type="button" onclick="stopAnimation()">click to stop animation</button>
+
+</body>
+</html>

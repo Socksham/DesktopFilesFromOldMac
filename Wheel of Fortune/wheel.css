@@ -1,0 +1,63 @@
+body{
+    background-color: rgb(187, 133, 236);
+}
+
+h1{
+    font-family: "Trebuchet MS", sans-serif; 
+    font-size: 50px;
+    text-align: center;
+    margin-top: 230px;
+}
+
+.div{
+    text-align: center;
+    margin-top: 50px;
+}
+
+#puzzle{
+    font-family: "Trebuchet MS", sans-serif; 
+    font-size: 40px;
+}
+
+#prize{
+    font-family: "Trebuchet MS", sans-serif; 
+    font-size: 30px;
+}
+
+.button{
+    font-family: "Trebuchet MS", sans-serif; 
+    font-size: 20px; 
+    font-style: normal; 
+    font-variant: normal; 
+    font-weight: 700; 
+    line-height: 26px; 
+    border-radius: 25px;
+    background-color: rgb(116, 118, 231);
+    border: none;
+    cursor: pointer;
+    outline: none;
+} 
+
+#setup:active{
+    background-color: rgb(255, 255, 255);
+}
+
+#spin:active{
+    background-color: rgb(255, 255, 255);
+}
+
+.textmore{
+    text-align: center;
+    font-family: "Trebuchet MS", sans-serif; 
+    font-size: 20px;
+}
+
+#Guess{
+    font-family: "Trebuchet MS", sans-serif; 
+    border: none;
+    text-align: center;
+    height: 30px;
+    width: 145px;
+    border-radius: 5px;
+    outline: none;
+}
